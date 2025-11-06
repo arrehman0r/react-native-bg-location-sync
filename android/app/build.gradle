@@ -76,7 +76,6 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
-
     namespace "com.dilgo"
     defaultConfig {
         applicationId "com.dilgo"
@@ -84,6 +83,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        missingDimensionStrategy 'geolocationservice', 'playServices'
     }
     signingConfigs {
         debug {

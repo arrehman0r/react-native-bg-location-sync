@@ -1,0 +1,1 @@
+export const REACT_NATIVE_PUBLIC_DEV_URL = "https://dilgo-openportbackend.lmkr.com/api/mobile/";
