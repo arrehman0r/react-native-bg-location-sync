@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,33 +8,55 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import { TextInput } from "react-native-paper";
-import { AppInput } from "../components/AppInput";
-import { PhoneIcon, DilgoLogo } from "../assets/svg";
-import AppButton from "../components/AppButton";
-import { LoginUser } from "../services/apiCalls";
-import { useDispatch } from "react-redux";
-import { setLoading, showToast } from "../redux/reducer/utilsSlice";
+} from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { AppInput } from '../components/AppInput';
+import { PhoneIcon, DilgoLogo } from '../assets/svg';
+import AppButton from '../components/AppButton';
+import { VerifyUser } from '../services/apiCalls';
+import { useDispatch } from 'react-redux';
+import { setLoading, showToast } from '../redux/reducer/utilsSlice';
 // import * as SecureStore from "expo-secure-store";
-import { setLoginUser } from "../redux/reducer/userSlice";
-import { useQueryClient } from "@tanstack/react-query";
-import { phoneRegex } from "../utils";
+import { setLoginUser } from '../redux/reducer/userSlice';
+import { useQueryClient } from '@tanstack/react-query';
+import { phoneRegex } from '../utils';
 
 const Login = ({ navigation }) => {
-  const [phone, setPhone] = useState("");
-const dispatch = useDispatch();
-  const handleSendOTP = () => {
+  const [phone, setPhone] = useState('');
+  const dispatch = useDispatch();
+  const handleSendOTP = async () => {
     Keyboard.dismiss();
+    dispatch(setLoading(true));
     if (phoneRegex.test(phone)) {
-      navigation.navigate("OTPVerification", { phoneNumber: phone });
     } else {
-      dispatch(showToast("Please enter a valid 11-digit mobile number."));
+      dispatch(showToast('Please enter a valid 11-digit mobile number.'));
+    }
+    try {
+      const body = {
+        phone: phone,
+        phoneCode: '+966',
+      };
+      const res = await VerifyUser(body);
+      console.log('VerifyUser Response:', res);
+      if (res?.status == true) {
+        dispatch(showToast(res?.message || 'OTP sent successfully.'));
+        navigation.navigate('OTPVerification', { phoneNumber: phone });
+      } else {
+        dispatch(
+          showToast(res?.message || 'Failed to send OTP. Please try again.'),
+        );
+  
+      }
+    } catch (error) {
+      console.error('Error in VerifyUser:', error);
+      dispatch(showToast('Failed to send OTP. Please try again.'));
+    } finally {
+      dispatch(setLoading(false));
     }
   };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -47,11 +69,10 @@ const dispatch = useDispatch();
             label="Mobile Number"
             keyboardType="number-pad"
             autoCapitalize="none"
-            placeholder={"0330-1212121"}
-            maxLength={11}
+            placeholder={'0330-1212121'}
+            maxLength={9}
             value={phone}
             onChangeText={setPhone}
-  
             left={<TextInput.Icon icon={() => <PhoneIcon />} />}
           />
 
@@ -71,36 +92,36 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 24,
   },
   title: {
     fontSize: 24,
-    fontFamily: "Poppins_600SemiBold",
-    fontWeight: "bold",
+    fontFamily: 'Poppins_600SemiBold',
+    fontWeight: 'bold',
     marginBottom: 40,
     lineHeight: 32,
     letterSpacing: 0,
   },
   subTitle: {
     fontSize: 12,
-    fontFamily: "Poppins_400Regular",
-    color: "#7A8A97",
-    fontWeight: "400",
+    fontFamily: 'Poppins_400Regular',
+    color: '#7A8A97',
+    fontWeight: '400',
     marginTop: 32,
-    textAlign: "center",
-    lineHeight: "100%",
+    textAlign: 'center',
+    lineHeight: '100%',
     letterSpacing: 0,
     paddingHorizontal: 32,
   },
   logoContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 48,
   },
   logo: {
     width: 120,
     height: 120,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
 });
 

@@ -100,15 +100,7 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
    (response) => {
-    // If response has pagination or meta, return whole object
-    if (response.data?.data && response.data?.page !== undefined) {
-      return {
-        ...response.data,   // keep pagination info (page, totalPages, etc.)
-        items: response.data.data, // rename to items for clarity
-      };
-    }
-
-    // Default: unwrap normal data
+      // Default: unwrap normal data
     return response.data;
   },
   async (error) => {

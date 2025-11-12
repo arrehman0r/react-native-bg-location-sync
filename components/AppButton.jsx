@@ -1,16 +1,16 @@
 import { Button, useTheme } from 'react-native-paper';
 
-const AppButton = ({ title, onPress, mode, disabled }) => {
+const AppButton = ({ title, onPress, mode, disabled, color, width }) => {
     const theme = useTheme();
 
     return (
         <Button
             mode={mode || 'contained'}
             onPress={onPress}
-            buttonColor={theme.colors.secondary}
+            buttonColor={color || theme.colors.secondary}
             disabled={disabled}
             labelStyle={{
-                fontFamily: 'Poppins_500Medium',
+                fontFamily: 'Poppins-Medium',
                 fontSize: 16,
                 lineHeight: 24,
                 fontWeight: '500',
@@ -25,6 +25,7 @@ const AppButton = ({ title, onPress, mode, disabled }) => {
                 height: 48,
                 justifyContent: 'center',
                 marginTop: 16,
+                width: width || '100%',
 
             }}
         >

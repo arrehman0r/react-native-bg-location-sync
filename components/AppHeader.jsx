@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontWeight: "600",
-    fontFamily: "NunitoSans_600SemiBold",
+    fontFamily: "Poppins-SemiBold",
     letterSpacing: 0,
     lineHeight: 24,
     paddingBottom: 20,

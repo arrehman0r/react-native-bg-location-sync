@@ -63,4 +63,4 @@ export const calculateDistance = (loc1, loc2) => {
     return R * c; // Distance in meters
 };
 
-export const phoneRegex = /^\d{11}$/;
+export const phoneRegex = /^\d{9,10}$/;

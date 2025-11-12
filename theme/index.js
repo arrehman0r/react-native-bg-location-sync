@@ -3,19 +3,37 @@ import { configureFonts, MD2LightTheme } from "react-native-paper";
 export const fontConfig = {
   android: {
     regular: {
-      fontFamily: 'Poppins_400Regular',
+      fontFamily: 'Poppins-Regular',
       fontWeight: '400',
     },
     medium: {
-      fontFamily: 'Poppins_500Medium',
+      fontFamily: 'Poppins-Medium',
       fontWeight: '500',
     },
     semiBold: {
-      fontFamily: 'Poppins_600SemiBold',
+      fontFamily: 'Poppins-SemiBold',
       fontWeight: '600',
     },
     bold: {
-      fontFamily: 'Poppins_700Bold',
+      fontFamily: 'Poppins-Bold',
+      fontWeight: '700',
+    },
+  },
+  ios: {
+    regular: {
+      fontFamily: 'Poppins-Regular',
+      fontWeight: '400',
+    },
+    medium: {
+      fontFamily: 'Poppins-Medium',
+      fontWeight: '500',
+    },
+    semiBold: {
+      fontFamily: 'Poppins-SemiBold',
+      fontWeight: '600',
+    },
+    bold: {
+      fontFamily: 'Poppins-Bold',
       fontWeight: '700',
     },
   },

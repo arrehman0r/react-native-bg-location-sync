@@ -1,12 +1,12 @@
 // Bare React Native uses a different StatusBar component
-import { StatusBar } from 'react-native';
+import { Alert, StatusBar } from 'react-native';
 
 // Removed: import { StatusBar } from 'expo-status-bar';
 // Removed: all imports from @expo-google-fonts
 
 // NOTE: You will need to import these components from the correct location in your project
 import AppNavigator from './routes';
-import { PaperProvider } from 'react-native-paper';
+import { Button, PaperProvider } from 'react-native-paper';
 import { theme } from './theme';
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -15,8 +15,9 @@ import AppLoader from './components/AppLoader';
 import AppToast from './components/AppToast';
 import { queryClient } from './services/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';1
-
-
+import messaging from '@react-native-firebase/messaging';
+import { useEffect } from 'react';
+import notifee from '@notifee/react-native';
 export default function App() {
   // ----------------------------------------------------
   // FONT LOADING - Temporary Fix
@@ -28,6 +29,57 @@ export default function App() {
 
   // const [fontsLoaded] = useFonts({ ... });
   // if (!fontsLoaded) return null;
+useEffect(() => {
+  const unsubscribe = messaging().onMessage(async remoteMessage => {
+    console.log('📱 Foreground FCM received:', remoteMessage);
+    
+    // Extract notification data
+    const title = remoteMessage.notification?.title || '🚛 Truck Tracker';
+    const body = remoteMessage.notification?.body || 'New update';
+    
+    console.log(`🔔 Showing notification: ${title} - ${body}`);
+    
+    // Show system notification
+    await notifee.displayNotification({
+      title: title,
+      body: body,
+      android: {
+        channelId: 'default',
+        smallIcon: 'ic_launcher',
+        pressAction: { id: 'default' },
+      },
+    });
+    
+    console.log('✅ Notification displayed successfully');
+  });
+
+  return unsubscribe;
+}, []);
+
+//  async function onDisplayNotification() {
+//     // Request permissions (required for iOS)
+//     await notifee.requestPermission()
+
+//     // Create a channel (required for Android)
+//     const channelId = await notifee.createChannel({
+//       id: 'default',
+//       name: 'Default Channel',
+//     });
+
+//     // Display a notification
+//     await notifee.displayNotification({
+//       title: 'Notification Title',
+//       body: 'Main body content of the notification',
+//       android: {
+//         channelId,
+//       smallIcon: 'ic_launcher',
+//         // pressAction is needed if you want the notification to open the app when pressed
+//         pressAction: {    
+//           id: 'default',
+//         },
+//       },
+//     });
+//   }
 
   return (
     <PaperProvider theme={theme}>

@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import Profile from "../screens/Profile";
 
 import OTPVerification from "../screens/OTPVerification";
+import LoginWithPassword from "../screens/LoginWithPassword";
+import History from "../screens/History";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,7 +48,7 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name="History"
-        component={Home}
+        component={History}
         options={{
           tabBarIcon: ({ color, size }) => <HistoryIcon color={color} />,
           headerShown: false,
@@ -123,7 +125,7 @@ const AppNavigator = () => {
           <>
             <Stack.Screen
               name="Login"
-              component={Login}
+              component={LoginWithPassword}
               options={{ headerShown: false }}
             />
             <Stack.Screen
