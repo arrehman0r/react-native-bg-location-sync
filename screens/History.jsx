@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { AppHeader } from '../components/AppHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addLocationPoint,
+  addLocationAndSync,
   setIsTrackingOn,
 } from '../redux/reducer/locationSlice';
 import { DeviceEventEmitter } from 'react-native';
@@ -17,19 +17,24 @@ const History = ({ navigation }) => {
   const dispatch = useDispatch();
   const currentCords = useSelector(state => state.location.current);
   const isTracking = useSelector(state => state.location.isTrackingOn);
-
+  // const lastSyncedTimestamp = useSelector(
+  //   state => state.location.lastSyncedTimestamp,
+  // );
   // Handle location updates from foreground service
-  const handleLocationUpdate = useCallback((locationData) => {
-    console.log('📍 UI Received location update:', locationData);
-    
-    dispatch(
-      addLocationPoint({
-        latitude: locationData.latitude,
-        longitude: locationData.longitude,
-        timestamp: locationData.timestamp,
-      })
-    );
-  }, [dispatch]);
+  const handleLocationUpdate = useCallback(
+    locationData => {
+      console.log('📍 UI Received location update:', locationData);
+
+      dispatch(
+        addLocationAndSync({
+          latitude: locationData.latitude,
+          longitude: locationData.longitude,
+          timestamp: locationData.timestamp,
+        }),
+      );
+    },
+    [dispatch],
+  );
 
   const checkStatus = async () => {
     const isRunning = await TaskManager.isTrackingRunning();
@@ -48,13 +53,12 @@ const History = ({ navigation }) => {
       await TaskManager.startTracking();
       dispatch(setIsTrackingOn(true));
       setPermissionStatus('active');
-      
+
       Alert.alert(
         'Foreground Service Started ✅',
         'Truck tracking is now active with system notification.',
-        [{ text: 'OK' }]
+        [{ text: 'OK' }],
       );
-      
     } catch (e) {
       console.error('Failed to start service:', e);
       Alert.alert('Error', 'Could not start tracking service.');
@@ -66,9 +70,8 @@ const History = ({ navigation }) => {
       await TaskManager.stopTracking();
       dispatch(setIsTrackingOn(false));
       setPermissionStatus('inactive');
-      
+
       Alert.alert('Service Stopped', 'Tracking has been stopped.');
-      
     } catch (e) {
       console.error('Failed to stop service:', e);
       Alert.alert('Error', 'Could not stop tracking service.');
@@ -81,7 +84,7 @@ const History = ({ navigation }) => {
     // Listen for location updates from foreground service
     const locationSubscription = DeviceEventEmitter.addListener(
       TaskManager.LOCATION_UPDATE_EVENT, // Use the imported constant
-      handleLocationUpdate
+      handleLocationUpdate,
     );
 
     return () => {
@@ -92,9 +95,16 @@ const History = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <AppHeader showLogo={true} navigation={navigation} />
-
+      
       {/* <ShipmentCard /> */}
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 20,
+        }}
+      >
         <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 30 }}>
           🚛 Truck Tracker
         </Text>
@@ -105,28 +115,32 @@ const History = ({ navigation }) => {
             {currentCords?.timestamp || 'No updates yet'}
           </Text>
         </View>
-        
+
         <View style={{ marginBottom: 30, alignItems: 'center' }}>
           <Text style={{ fontSize: 18 }}>Latitude:</Text>
           <Text style={{ fontSize: 32, fontWeight: 'bold' }}>
             {currentCords?.latitude ? currentCords.latitude.toFixed(6) : 'N/A'}
           </Text>
         </View>
-        
+
         <View style={{ marginBottom: 30, alignItems: 'center' }}>
           <Text style={{ fontSize: 18 }}>Longitude:</Text>
           <Text style={{ fontSize: 32, fontWeight: 'bold' }}>
-            {currentCords?.longitude ? currentCords.longitude.toFixed(6) : 'N/A'}
+            {currentCords?.longitude
+              ? currentCords.longitude.toFixed(6)
+              : 'N/A'}
           </Text>
         </View>
 
-        <Text style={{
-          marginBottom: 30,
-          color: isTracking ? 'green' : 'red',
-          fontWeight: '600',
-          fontSize: 16,
-          textAlign: 'center'
-        }}>
+        <Text
+          style={{
+            marginBottom: 30,
+            color: isTracking ? 'green' : 'red',
+            fontWeight: '600',
+            fontSize: 16,
+            textAlign: 'center',
+          }}
+        >
           {isTracking ? '✅ FOREGROUND SERVICE ACTIVE' : '❌ SERVICE INACTIVE'}
         </Text>
 

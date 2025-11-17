@@ -7,7 +7,9 @@ import { Alert, PermissionsAndroid, DeviceEventEmitter, Platform } from 'react-n
 export const LOCATION_TASK_NAME = 'TRUCK_TRACKING_FOREGROUND_SERVICE';
 export const LOCATION_UPDATE_EVENT = 'BACKGROUND_LOCATION_UPDATE';
 
-const LOCATION_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+const LOCATION_INTERVAL_MS = 1 * 60 * 1000
+
+// In backgroundTask - just this single line:
 
 // Foreground Service Configuration
 const options = {
@@ -62,6 +64,7 @@ const backgroundTask = async (taskData) => {
 
                 // Send to Redux
                 DeviceEventEmitter.emit(LOCATION_UPDATE_EVENT, locationData);
+                
                 console.log('✅ Foreground Service - Location Updated:', locationData);
                 
             } catch (locationError) {

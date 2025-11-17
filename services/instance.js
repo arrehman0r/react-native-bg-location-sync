@@ -65,7 +65,10 @@ export const makeRequest = async (type, path, body = null, options = {}) => {
       default:
         throw new Error("Unsupported request type");
     }
+// console.log("=== API Success ===", {
 
+//   data: response
+// });
     return response;
   } catch (error) {
     console.log("=== API Error ===", JSON.stringify(error));

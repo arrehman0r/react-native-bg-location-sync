@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { AppHeader } from '../components/AppHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addLocationPoint,
+  addLocationAndSync,
   setIsTrackingOn,
 } from '../redux/reducer/locationSlice';
 import { DeviceEventEmitter } from 'react-native';
@@ -24,7 +24,7 @@ const Home = ({ navigation }) => {
     console.log('📍 UI Received location update:', locationData);
     
     dispatch(
-      addLocationPoint({
+      addLocationAndSync({
         latitude: locationData.latitude,
         longitude: locationData.longitude,
         timestamp: locationData.timestamp,

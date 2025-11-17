@@ -18,6 +18,8 @@ import { QueryClientProvider } from '@tanstack/react-query';1
 import messaging from '@react-native-firebase/messaging';
 import { useEffect } from 'react';
 import notifee from '@notifee/react-native';
+import NetInfo from '@react-native-community/netinfo';
+import { syncAllLocations } from './redux/reducer/locationSlice';
 export default function App() {
   // ----------------------------------------------------
   // FONT LOADING - Temporary Fix
@@ -81,6 +83,13 @@ useEffect(() => {
 //     });
 //   }
 
+
+// Listen for network connectivity
+NetInfo.addEventListener(state => {
+  if (state.isConnected) {
+    store.dispatch(syncAllLocations());
+  }
+});
   return (
     <PaperProvider theme={theme}>
       <Provider store={store}>
