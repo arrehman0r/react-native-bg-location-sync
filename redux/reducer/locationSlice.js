@@ -66,9 +66,14 @@ export const syncAllLocations = () => async (dispatch, getState) => {
     // Build payload in required format
     const records = unsyncedLocations.map((loc) => {
       const dt_server = new Date().toISOString();
-      const dt_tracker = loc.timestamp
-        ? dayjs(loc.timestamp).format('DD-MM-YYYY HH:mm:ss')
-        : dayjs().format('DD-MM-YYYY HH:mm:ss');
+      // Safely parse timestamp: try as-is first, fallback to ISO string parsing
+      let dt_tracker = 'Invalid Date';
+      if (loc.timestamp) {
+        const parsed = dayjs(loc.timestamp);
+        dt_tracker = parsed.isValid() ? parsed.format('DD-MM-YYYY HH:mm:ss') : dayjs().format('DD-MM-YYYY HH:mm:ss');
+      } else {
+        dt_tracker = dayjs().format('DD-MM-YYYY HH:mm:ss');
+      }
 
       return {
         truck: loc.truck || 'MH-12-AB-1234', // hardcoded fallback
@@ -97,7 +102,7 @@ export const syncAllLocations = () => async (dispatch, getState) => {
 
     // Sync to backend
     const syncRes = await syncOfflineData(payload);
-    console.log('✅ Sync response:', syncRes);
+    console.log('✅ Sync response:', syncRes, payload);
 
     // Mark as synced: clear pending queue and set last synced timestamp
     const latestTimestamp = unsyncedLocations[unsyncedLocations.length - 1].timestamp || new Date().toISOString();
