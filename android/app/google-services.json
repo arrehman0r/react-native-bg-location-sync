@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "570569261947",
-    "project_id": "dilgo-838a7",
-    "storage_bucket": "dilgo-838a7.firebasestorage.app"
+    "project_number": "",
+    "project_id": "",
+    "storage_bucket": ""
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:570569261947:android:8cb2b1d1aa0a4b1238f3de",
+        "mobilesdk_app_id": "",
         "android_client_info": {
-          "package_name": "com.dilgo"
+          "package_name": ""
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCOwkbcf_2yCqqttSuv_yKzcovZ5tPpmh0"
+          "current_key": ""
         }
       ],
       "services": {
