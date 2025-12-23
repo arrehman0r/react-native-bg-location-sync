@@ -654,9 +654,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For issues, questions, or suggestions:
 
-- **Issues:** [GitHub Issues](https://github.com/yourusername/react-native-truck-tracker/issues)
-- **Email:** your.email@example.com
-- **Documentation:** [Full Docs](https://github.com/yourusername/react-native-truck-tracker/wiki)
+- **Issues:** [GitHub Issues](https://github.com/arrehman0r/react-native-truck-tracker/issues)
+- **Email:** arrehman0r@gmail.com
+- **Documentation:** [Full Docs](https://github.com/arrehman0r/react-native-truck-tracker/wiki)
 
 ---
 
